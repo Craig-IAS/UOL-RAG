@@ -11,6 +11,29 @@ interface  Message {
 function App() {
     const [inputValue,setInputValue] = useState('');
     const [messages,setMessages] = useState<Message[]>([]);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            setSelectedFile(file);
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('http://localhost:8000/upload/', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log(result);
+            } else {
+                console.error('File upload failed');
+            }
+        }
+    };
 
     const setPartialMessage = (chunk: string, sources: string[] = []) => {
     setMessages(prevMessages => {
@@ -117,6 +140,26 @@ function App() {
                     </button>
                 </div>
             </div>
+             {/*add drag and drop to upload files*/}
+                <div className="flex justify-center mt-4">
+                    <label className="flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
+                        <svg
+                            className="w-8 h-8"
+                            fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M10 12a2 2 0 100-4 2 2 0 000 4zm0 2a4 4 0 100-8 4 4 0 000 8zm-1 2a1 1 0 112 0v3a1 1 0 11-2 0v-3zm-1-2a3 3 0 116 0 3 3 0 01-6 0z"
+                            />
+                        </svg>
+                        <span className="mt-2 text-base leading-normal">Upload a file</span>
+                        <input type="file" className="hidden" onChange={handleFileChange} />
+                    </label>
+                </div>
+
 
         </main>
         <footer className={`bg-gray-800 text-white flex items-center justify-center h-16`}>
@@ -124,7 +167,7 @@ function App() {
         </footer>
 
     </div>
-  );
+    );
 }
 
 export default App;

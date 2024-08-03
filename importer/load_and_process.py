@@ -37,7 +37,5 @@ PGVector.from_documents(
     collection_name=PG_COLLECTION_NAME,
     connection_string=POSTGRES_CONNECTION_STRING,
     pre_delete_collection=True,
-),
+)
 
-print("chunks")
-print(chunks)
