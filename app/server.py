@@ -4,7 +4,8 @@ from langserve import add_routes
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 from importer.loadFile import load_file_to_pgvector
-
+import os
+from fastapi.responses import JSONResponse
 from app.rag_chain import final_chain
 
 app = FastAPI()
@@ -30,6 +31,13 @@ async def upload_file(file: UploadFile = File(...)):
     # Call the function to load the file to PGVector
     load_file_to_pgvector(file_location)
     return {"info": f"file '{file.filename}' saved at '{file_location}'"}
+
+
+@app.get("/documents/")
+async def list_documents():
+    directory = "./source_docs"
+    documents = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
+    return JSONResponse(content={"documents": documents})
 
 
 # Edit this to add the chain you want to add
