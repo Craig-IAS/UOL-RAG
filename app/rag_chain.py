@@ -21,7 +21,7 @@ vector_store = PGVector(
     connection_string=POSTGRES_CONNECTION_STRING,
     embedding_function=OpenAIEmbeddings(),
 )
-
+llm = ChatOpenAI(temperature=0, model='gpt-4-1106-preview', streaming=True)
 
 
 
@@ -36,7 +36,7 @@ Question: {question}
 
 ANSWER_PROMPT = ChatPromptTemplate.from_template(template)
 
-llm = ChatOpenAI(temperature=0, model='gpt-4-1106-preview', streaming=True)
+
 
 
 class RagInput(TypedDict):
@@ -44,9 +44,7 @@ class RagInput(TypedDict):
 
 
 vector_store.as_retriever()
-#search_type="similarity_score_threshold",search_kwargs={'score_threshold': 0.5}
-#search_type="mmr"
-#search_kwargs={"k": 1}
+
 multiquery = MultiQueryRetriever.from_llm(retriever=vector_store.as_retriever(search_type="similarity_score_threshold", search_kwargs={"score_threshold": 0.6}), llm=llm)
 
 no_history = (
@@ -118,9 +116,3 @@ final_chain = RunnableWithMessageHistory(
 
 
 
-# final_chain = {"context": itemgetter("question") | vector_store.as_retriever() , "question": itemgetter("question")} | ANSWER_PROMPT | llm | StrOutputParser()
-# FINAL_CHAIN_INVOKE = final_chain.astream_log({"question":"What are the challenges in evaulating a RAG system, provides quotes from the paper to support your answer?"})
-# async def __main__():
-#     async for c in FINAL_CHAIN_INVOKE:
-#         print(c)
-# asyncio.run(__main__())

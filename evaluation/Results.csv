@@ -1,0 +1,6 @@
+Topic;True Pos;False Pos;False Negatives;;precision;recall
+Jazz;58;13;0;;0.82;1
+Egyptian;36;3;0;;0.92;1
+HealthCare;24;0;0;;1.00;1
+Renewable;50;2;0;;0.96;1
+Sustainable Cities;56;0;0;;1.00;1
