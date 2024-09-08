@@ -1,8 +1,1 @@
-Topic,True Pos,False Pos,False Neg,,Precision,Recall,F1 Score
-Jazz,58,13,0,,0.82,1,0.90
-Egyptian,36,3,0,,0.92,1,0.96
-HealthCare,24,0,0,,1,1,1.00
-Renewable,50,2,0,,0.96,1,0.98
-Sustainable Cities,56,0,0,,1,1,1.00
-,,,,,,,
-Total ,224,18,0,,0.93,1,0.96
+
